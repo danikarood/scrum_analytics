@@ -1,2 +1,2 @@
-# Scrum_Analytics
+# scrum_analytics
 
