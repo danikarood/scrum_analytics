@@ -1,0 +1,198 @@
+/*.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}*/
+
+/* Global Reset */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  /* Finally got this gradient to stop looking like a flat mess */
+  background: radial-gradient(circle at 50% 0%, #1e3a8a 0%, #0b192c 100%);
+  color: #f8fafc;
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* Force Bebas Neue because standard fonts look like a homework assignment */
+h1, h2, h3, .navbar-brand, .cta-button {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1.5px;
+}
+
+/*Navbar - Don't ask me how long the blur filter took. It works now.*/
+.custom-navbar {
+  background: rgba(11, 25, 44, 0.95) !important;
+  backdrop-filter: blur(15px);
+  border-bottom: 2px solid #FF6500;
+  padding: 15px 0;
+}
+
+.custom-navbar .navbar-brand {
+  font-weight: 800;
+  color: #FF6500 !important;
+  font-size: 1.8rem;
+}
+
+/*Layout & Banner - The shadow finally looks okay. Moving on.*/
+.landing-container { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+
+.upcoming-banner {
+  background: linear-gradient(135deg, #FF6500 0%, #d35400 100%);
+  padding: 30px;
+  border-radius: 20px;
+  margin-bottom: 40px;
+  text-align: center;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.games-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.game-card {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  border-radius: 12px;
+  min-width: 200px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/*Carousel - If this stops centering, I'm literally going to throw my laptop.*/
+.carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.carousel-container {
+  display: flex;
+  gap: 30px;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  width: 100%;
+  padding: 20px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.team-card {
+  flex: 0 0 280px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.team-card:hover { 
+  transform: translateY(-15px); 
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #FF6500; 
+}
+
+.team-logo-img { width: 90px; height: auto; margin-bottom: 20px; }
+
+/*Buttons - Added glow because plain orange was depressing.*/
+.cta-button {
+  background: #FF6500;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.cta-button:hover { 
+  background: #ff8c00; 
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 101, 0, 0.5);
+}
+
+/* Nav Arrows - These barely work, so don't you dare touch the positioning. */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  background: #FF6500;
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: 0.3s;
+}
+
+.nav-btn:hover { background: #ff8c00; transform: scale(1.1); }
+.nav-btn.left { left: -25px; }
+.nav-btn.right { right: -25px; }
+
+.footer-container {
+  text-align: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-top: auto;
+}
+
+.navbar-custom {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #0b192c;
+  border-bottom: 2px solid #FF6500;
+}
+.navbar-custom a {
+  color: white;
+  text-decoration: none;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+}
