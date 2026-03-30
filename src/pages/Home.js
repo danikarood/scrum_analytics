@@ -1,106 +1,103 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../App.css';
+import TeamCard from '../components/TeamCard';// pulling in the new components so that all the cards could have logos.
 
 function Home() {
   const [teams, setTeams] = useState([]);
-  const [games, setGames] = useState([]);
+  const [standings, setStandings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
   const carouselRef = useRef(null);
 
+  const API_KEY = "dc88cdd9263fa29e592b9e6ed1901ba9";
+
   useEffect(() => {
-    // Why am I writing this function for the 10th time today?
     const fetchData = async () => {
       try {
         setLoading(true);
+        const [sRes, tRes] = await Promise.all([
+          axios.get('https://v1.rugby.api-sports.io/standings?league=76&season=2024', { headers: { 'x-apisports-key': API_KEY } }),
+          axios.get('https://v1.rugby.api-sports.io/teams?league=76&season=2024', { headers: { 'x-apisports-key': API_KEY } })
+        ]);
 
-        // Fetching teams. If this fails, I'm literally going to toss my laptop out the window.
-        const teamsRes = await axios.get('https://v1.rugby.api-sports.io/teams?country=South-Africa', {
-          headers: { 'x-apisports-key': 'dc88cdd9263fa29e592b9e6ed1901ba9' }
-        });
-        
-        // Hardcoded filter because the API loves to send me random nonsense.
-        const targetList = ["Bulls", "Stormers", "Sharks", "Lions", "Cheetahs", "Pumas", "Griffons", "Griquas", "Western Province", "Boland"];
-        const filtered = teamsRes.data.response.filter(t => 
-            targetList.some(name => t.name.includes(name))
-        );
-        setTeams(filtered);
-
-        // Fetching games. Added '/games' because the previous URL was basically a brick wall.
-        const gamesRes = await axios.get('https://v1.rugby.api-sports.io/games?league=123&season=2025', {
-          headers: { 'x-apisports-key': 'dc88cdd9263fa29e592b9e6ed1901ba9' }
-        });
-        setGames(gamesRes.data.response.slice(0, 3));
-        
-      } catch (err) { 
-        // Everything is breaking. I don't even care anymore.
-        console.error("Everything is broken:", err); 
+        if (sRes.data.response?.[0]) setStandings(sRes.data.response[0].slice(0, 3));
+        if (tRes.data.response) setTeams(tRes.data.response);
+      } catch (err) {
+        console.error("Error while fetching data:", err);
       } finally {
         setLoading(false);
       }
     };
-    
     fetchData();
-
-    // Auto-scroll logic. This code is held together by hope and duct tape.
-    const interval = setInterval(() => {
-      if (carouselRef.current) {
-        carouselRef.current.scrollBy({ left: 300, behavior: 'smooth' });
-        if (carouselRef.current.scrollLeft >= carouselRef.current.scrollWidth - carouselRef.current.clientWidth) {
-          carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        }
-      }
-    }, 3000);
-    
-    return () => clearInterval(interval);
   }, []);
 
-  // Renamed to 'handleCarouselScroll' just to satisfy ESLint's obsession with restricted globals.
-  const handleCarouselScroll = (direction) => {
-    if (carouselRef.current) {
-      const amount = 300;
-      carouselRef.current.scrollBy({ 
-        left: direction === 'left' ? -amount : amount, 
-        behavior: 'smooth' 
-      });
-    }
-  };
+  useEffect(() => {
+    if (isPaused || loading || teams.length === 0) return;
+    const interval = setInterval(() => {
+      if (carouselRef.current) {
+        carouselRef.current.scrollLeft += 1.2; 
+        if (carouselRef.current.scrollLeft >= (carouselRef.current.scrollWidth - carouselRef.current.clientWidth)) {
+          carouselRef.current.scrollLeft = 0;
+        }
+      }
+    }, 20);
+    return () => clearInterval(interval);
+  }, [isPaused, loading, teams]);
 
-  // If this stays on "Still loading" forever, I'm just going to go to sleep.
-  if (loading) return <div className="loading">Still loading... please don't crash.</div>;
+  if (loading) return <div className="loading-screen">URC DATA SYNC...</div>;
 
   return (
-    <div className="landing-container">
-      {/* Banner - Finally displays something other than a blank orange box */}
-      <div className="upcoming-banner">
-        <h2>NEXT MATCHES</h2>
-        <div className="games-grid">
-          {games.length > 0 ? games.map(g => (
-            <div key={g.id} className="game-card">
-              <p>{new Date(g.date).toDateString()}</p>
-              <strong>{g.teams.home.name} vs {g.teams.away.name}</strong>
+    <div className="landing-container" style={{ 
+      background: 'radial-gradient(circle at 50% 50%, #1a2a44 0%, #0B192C 100%)', 
+      minHeight: '100vh', 
+      padding: '40px 20px' 
+    }}>
+      
+      {/* 2024 TOP PERFORMERS BANNER */}
+      <div className="glass-banner" style={{ 
+        background: 'rgba(255, 101, 0, 0.08)', 
+        border: '1px solid rgba(255, 101, 0, 0.3)', 
+        padding: '30px', 
+        borderRadius: '25px', 
+        marginBottom: '60px', 
+        textAlign: 'center',
+        backdropFilter: 'blur(10px)'
+      }}>
+        <h2 style={{ color: '#FF6500', fontWeight: '900', letterSpacing: '2px', marginBottom: '25px' }}>2024 TOP PERFORMERS</h2>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', flexWrap: 'wrap' }}>
+          {standings.map((pos, i) => (
+            <div key={i} style={{ 
+              display: 'flex', alignItems: 'center', gap: '15px', 
+              background: 'rgba(255, 255, 255, 0.05)', padding: '10px 25px', 
+              borderRadius: '50px', border: '1px solid rgba(255, 255, 255, 0.1)'
+            }}>
+              <span style={{ color: '#FF6500', fontWeight: '900' }}>#{i+1}</span>
+              <img src={pos.team.logo} alt="" style={{ height: '35px', objectFit: 'contain' }} />
+              <span style={{ color: 'white', fontWeight: 'bold' }}>{pos.team.name}: {pos.points} PTS</span>
             </div>
-          )) : <p>No scheduled matches found. Figures.</p>}
+          ))}
         </div>
       </div>
 
-      <h2>SA DERBY TRACKER</h2>
+      <h2 style={{ color: 'white', marginBottom: '30px', fontWeight: '800' }}>EXPLORE CONTENDERS</h2>
       
-      {/* Carousel - If these buttons don't work, I give up on UI design forever */}
-      <div className="carousel-wrapper">
-        <button className="nav-btn left" onClick={() => handleCarouselScroll('left')}>❮</button>
-        <div className="carousel-container" ref={carouselRef}>
-          {teams.length > 0 ? teams.map(team => (
-            <div key={team.id} className="team-card">
-              <img src={team.logo} alt={team.name} className="team-logo-img" />
-              <h3>{team.name}</h3>
-              <button className="cta-button">VIEW STATS</button>
-            </div>
-          )) : <p>No teams loaded. Great.</p>}
-        </div>
-        <button className="nav-btn right" onClick={() => handleCarouselScroll('right')}>❯</button>
+      {/* CAROUSEL */}
+      <div 
+        ref={carouselRef}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        style={{ 
+          display: 'flex', overflowX: 'auto', gap: '25px', 
+          paddingBottom: '30px', scrollbarWidth: 'none', paddingLeft: '10px'
+        }}
+      >
+        {teams.map(team => (
+          <TeamCard key={team?.id || team?.team?.id} team={team} />
+        ))}
       </div>
     </div>
   );
 }
+
 export default Home;
