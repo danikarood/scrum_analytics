@@ -6,7 +6,7 @@
 
 ## 🎥 Project Walkthrough Video
 Because the video file was too large to submit directly to the platform, I have uploaded my screen recording to Google Drive. 
-[https://drive.google.com/file/d/1FQBOGH6bfGylzlX5NyDkwgiDyGM1BOQQ/view?usp=sharing]
+[https://drive.google.com/drive/folders/1kTmfApFjkKWwnxJd4zFYd0XLYrhXEBhG?usp=sharing]
 
 *(Note to lecturer: Please ensure you use this link directly. I have set the access permissions to "Anyone with the link" so you shouldn't need to request access!)*
 
